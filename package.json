@@ -1,0 +1,31 @@
+{
+  "name": "tailwind-ecommerce-template",
+  "version": "1.0.0",
+  "description": "An ecommerce template built with TailwindCSS",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "tailwindcss -i ./src/main.css -o ./dist/main.css -w",
+    "serve": "five-server",
+    "start": "concurrently \"npm run build:css\" \"npm run serve\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jluterek/tailwind-ecommerce-template.git"
+  },
+  "author": "James Luterek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jluterek/tailwind-ecommerce-template/issues"
+  },
+  "homepage": "https://github.com/jluterek/tailwind-ecommerce-template#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "concurrently": "^7.6.0",
+    "five-server": "^0.1.9",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7"
+  },
+  "dependencies": {
+  }
+}
