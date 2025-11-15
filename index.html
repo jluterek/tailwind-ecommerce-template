@@ -2,342 +2,659 @@
 <html lang="en">
 
 <head>
-    <title>Homepage - TailwindCSS Ecommerce Template</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="referrer" content="always">
-    <meta name="description" content="TailwindCSS Ecommerce Template">
+
+    <!-- Primary Meta Tags -->
+    <title>Acme Store - Premium E-commerce Template | TailwindCSS</title>
+    <meta name="title" content="Acme Store - Premium E-commerce Template | TailwindCSS">
+    <meta name="description" content="A modern, responsive e-commerce template built with TailwindCSS, Alpine.js, and best practices. Features dark mode, accessibility, and beautiful UI components.">
+    <meta name="keywords" content="ecommerce, tailwindcss, template, alpine.js, dark mode, responsive, shopping">
+    <meta name="author" content="James Luterek">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jluterek.github.io/tailwind-ecommerce-template/">
+    <meta property="og:title" content="Acme Store - Premium E-commerce Template">
+    <meta property="og:description" content="A modern, responsive e-commerce template built with TailwindCSS featuring dark mode and beautiful UI.">
+    <meta property="og:image" content="https://jluterek.github.io/tailwind-ecommerce-template/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://jluterek.github.io/tailwind-ecommerce-template/">
+    <meta property="twitter:title" content="Acme Store - Premium E-commerce Template">
+    <meta property="twitter:description" content="A modern, responsive e-commerce template built with TailwindCSS featuring dark mode and beautiful UI.">
+    <meta property="twitter:image" content="https://jluterek.github.io/tailwind-ecommerce-template/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://images.unsplash.com">
+
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="dist/main.css">
     <link href="https://unpkg.com/css.gg@2.1.1/icons/all.css" rel="stylesheet">
+
+    <!-- Theme Script (run before page render to prevent flash) -->
+    <script>
+        // Initialize theme from localStorage or system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- Alpine.js -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js" defer></script>
 </head>
 
-<body>
-    <div x-data="{ cartOpen: false , isOpen: false }">
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div x-data="{ cartOpen: false, isOpen: false, darkMode: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) }"
+         x-init="$watch('darkMode', value => {
+             if (value) {
+                 document.documentElement.classList.add('dark');
+                 localStorage.theme = 'dark';
+             } else {
+                 document.documentElement.classList.remove('dark');
+                 localStorage.theme = 'light';
+             }
+         })"
+         @keydown.escape.window="cartOpen = false; isOpen = false">
         <!-- #region Header -->
-        <header class="bg-white">
+        <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors duration-200">
             <div class="container mx-auto px-6 py-3">
                 <div class="flex items-center justify-between">
-                    <div class="hidden w-full text-gray-600 md:flex md:items-center">
+                    <div class="hidden w-full text-gray-600 dark:text-gray-300 md:flex md:items-center gap-2">
                         <i class="gg-profile"></i>
+                        <span class="text-sm hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition-colors">Account</span>
                     </div>
-                    <div
-                        class="w-full text-blue-900 md:text-center font-mono text-4xl font-semibold uppercase tracking-widest">
+                    <div class="w-full text-blue-900 dark:text-blue-400 md:text-center font-mono text-4xl font-semibold uppercase tracking-widest">
                         Acme
                     </div>
-                    <div class="flex items-center justify-end w-full">
-                        <button @click="cartOpen = !cartOpen" class="text-gray-600 focus:outline-none mx-4 sm:mx-0">
-                            <i class="gg-shopping-cart"></i>
+                    <div class="flex items-center justify-end w-full gap-3">
+                        <!-- Theme Switcher -->
+                        <button
+                            @click="darkMode = !darkMode"
+                            class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none transition-colors"
+                            aria-label="Toggle dark mode"
+                            title="Toggle dark mode">
+                            <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                            <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
                         </button>
 
+                        <!-- Cart Button -->
+                        <button
+                            @click="cartOpen = !cartOpen"
+                            class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none mx-2 relative transition-colors"
+                            aria-label="Shopping cart"
+                            title="Shopping cart">
+                            <i class="gg-shopping-cart"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">2</span>
+                        </button>
+
+                        <!-- Mobile Menu Toggle -->
                         <div class="flex sm:hidden">
-                            <button @click="isOpen = !isOpen" type="button"
-                                class="text-gray-600 hover:text-gray-500 focus:outline-none focus:text-gray-500"
-                                aria-label="toggle menu">
-                                <i class="gg-menu-grid-r"></i>
+                            <button
+                                @click="isOpen = !isOpen"
+                                type="button"
+                                class="text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none transition-colors"
+                                aria-label="Toggle menu"
+                                :aria-expanded="isOpen">
+                                <i :class="isOpen ? 'gg-close' : 'gg-menu-grid-r'"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-                <nav :class="isOpen ? '' : 'hidden'" class="sm:flex sm:justify-center sm:items-center mt-4">
+                <nav
+                    x-show="isOpen || window.innerWidth >= 640"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 transform -translate-y-2"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    class="sm:flex sm:justify-center sm:items-center mt-4"
+                    role="navigation"
+                    aria-label="Main navigation">
                     <div class="flex flex-col sm:flex-row">
-                        <a class="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0" href="index.html">Home</a>
-                        <a class="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0" href="category.html">Category</a>
-                        <a class="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0" href="product.html">Product</a>
-                        <a class="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0" href="cart.html">Cart</a>
-                        <a class="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0" href="contact.html">Contact</a>
+                        <a class="nav-link" href="index.html" aria-current="page">Home</a>
+                        <a class="nav-link" href="category.html">Category</a>
+                        <a class="nav-link" href="product.html">Product</a>
+                        <a class="nav-link" href="cart.html">Cart</a>
+                        <a class="nav-link" href="contact.html">Contact</a>
                     </div>
                 </nav>
                 <div class="relative mt-6 max-w-lg mx-auto">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                    <label for="search" class="sr-only">Search products</label>
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
                         <i class="gg-search"></i>
                     </span>
-
                     <input
-                        class="w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-4 shadow-sm transition duration-200 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50"
-                        type="text" placeholder="Search" aria-label="Search products">
+                        id="search"
+                        type="search"
+                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 py-2.5 pl-10 pr-4 shadow-sm transition duration-200 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-500 focus:ring-opacity-50 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                        placeholder="Search for products..."
+                        aria-label="Search products"
+                        autocomplete="off">
                 </div>
             </div>
         </header>
         <!-- #endregion Header -->
 
+        <!-- Cart Overlay -->
+        <div
+            x-show="cartOpen"
+            @click="cartOpen = false"
+            x-transition:enter="transition-opacity ease-linear duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-linear duration-300"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black bg-opacity-50 z-40"
+            style="display: none;"
+            aria-hidden="true"></div>
+
         <!-- #region Cart -->
-        <div :class="cartOpen ? 'translate-x-0 ease-out' : 'translate-x-full ease-in'"
-            class="fixed right-0 top-0 max-w-xs w-full h-full px-6 py-4 transition duration-300 transform overflow-y-auto bg-white border-l-2 border-gray-300 hidden"
-            x-init="() => { $el.classList.remove('hidden'); }">
-            <div class="flex items-center justify-between">
-                <h3 class="text-2xl font-medium text-gray-700">Your cart</h3>
-                <button @click="cartOpen = !cartOpen" class="text-gray-600 focus:outline-none">
+        <aside
+            x-show="cartOpen"
+            @click.away="cartOpen = false"
+            x-transition:enter="transition ease-in-out duration-300 transform"
+            x-transition:enter-start="translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in-out duration-300 transform"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="translate-x-full"
+            class="fixed right-0 top-0 max-w-sm w-full h-full px-6 py-4 overflow-y-auto bg-white dark:bg-gray-800 border-l-2 border-gray-200 dark:border-gray-700 shadow-2xl z-50"
+            style="display: none;"
+            role="dialog"
+            aria-label="Shopping cart"
+            aria-modal="true">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">Your Cart</h3>
+                <button
+                    @click="cartOpen = false"
+                    class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none transition-colors"
+                    aria-label="Close cart">
                     <i class="gg-close"></i>
                 </button>
             </div>
-            <hr class="my-3">
-            <div class="flex justify-between mt-6">
-                <div class="flex">
-                    <img class="h-20 w-20 object-cover" src="images/tshirt-front-white-small.png" alt="">
-                    <div class="mx-3">
-                        <h3 class="text-sm text-gray-600">T-Shirt</h3>
-                        <div class="flex items-center mt-2">
-                            <button class="text-gray-500 focus:outline-none focus:text-gray-600">
+            <hr class="border-gray-200 dark:border-gray-700">
+
+            <!-- Cart Item -->
+            <div class="mt-6 space-y-6">
+                <div class="flex gap-4 items-start p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <img
+                        class="h-20 w-20 object-cover rounded-md"
+                        src="images/tshirt-front-white-small.png"
+                        alt="T-Shirt product image"
+                        loading="lazy">
+                    <div class="flex-1">
+                        <h4 class="text-sm font-medium text-gray-800 dark:text-gray-100">Premium T-Shirt</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Size: M, Color: White</p>
+                        <div class="flex items-center mt-3 gap-3">
+                            <button
+                                class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none transition-colors"
+                                aria-label="Decrease quantity">
                                 <i class="gg-remove"></i>
                             </button>
-                            <span class="text-gray-700 mx-2">2</span>
-                            <button class="text-gray-500 focus:outline-none focus:text-gray-600">
+                            <span class="text-gray-700 dark:text-gray-200 font-medium min-w-[2ch] text-center">2</span>
+                            <button
+                                class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none transition-colors"
+                                aria-label="Increase quantity">
                                 <i class="gg-add"></i>
                             </button>
                         </div>
                     </div>
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-100">$24.99</p>
+                        <button
+                            class="text-xs text-red-500 hover:text-red-700 dark:hover:text-red-400 mt-2 transition-colors"
+                            aria-label="Remove item">
+                            Remove
+                        </button>
+                    </div>
                 </div>
-                <span class="text-gray-600">$24.99</span>
             </div>
-            <a
-                class="flex cursor-pointer items-center justify-center mt-4 px-3 py-2 bg-green-700 text-white text-sm uppercase font-medium hover:bg-green-500 focus:outline-none focus:bg-green-500">
-                <span>Checkout</span>
-                <i class="px-2 gg-arrow-right"></i>
-            </a>
-        </div>
+
+            <!-- Cart Summary -->
+            <div class="mt-8 space-y-4">
+                <hr class="border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
+                    <span class="text-gray-800 dark:text-gray-100 font-medium">$49.98</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600 dark:text-gray-400">Shipping</span>
+                    <span class="text-green-600 dark:text-green-400 font-medium">Free</span>
+                </div>
+                <hr class="border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between">
+                    <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">Total</span>
+                    <span class="text-lg font-bold text-gray-900 dark:text-white">$49.98</span>
+                </div>
+            </div>
+
+            <!-- Checkout Button -->
+            <button class="w-full mt-6 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold uppercase rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <span>Proceed to Checkout</span>
+                <i class="gg-arrow-right"></i>
+            </button>
+        </aside>
         <!-- #endregion Cart -->
 
         <main class="my-8">
             <!-- #region Body -->
             <div class="container mx-auto px-6">
-                <div class="h-96 overflow-hidden bg-cover bg-center"
-                    style="background-image: url('https://images.unsplash.com/photo-1529958030586-3aae4ca485ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80')">
-                    <div class="bg-gray-900 bg-opacity-50 flex items-center h-full">
-                        <div class="px-10 max-w-xl">
-                            <h2 class="text-2xl text-white font-semibold">Hats</h2>
-                            <p class="mt-2 text-gray-400">Get ready to elevate your fashion game with our incredible
-                                hats sale! From trendy fedoras to classic beanies, you won't want to miss these
-                                unbeatable deals.</p>
-                            <button
-                                class="flex items-center mt-4 px-3 py-2 bg-blue-600 text-white text-sm uppercase font-medium hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
-                                <span>Shop Now</span>
-                                <i class="px-2 gg-arrow-right"></i>
+                <!-- Hero Section -->
+                <section
+                    class="relative h-96 overflow-hidden bg-cover bg-center rounded-2xl shadow-2xl group"
+                    style="background-image: url('https://images.unsplash.com/photo-1529958030586-3aae4ca485ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80')"
+                    aria-label="Featured collection: Hats">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/90 to-transparent dark:from-black dark:via-black/90 flex items-center transition-all duration-300 group-hover:bg-gray-900/60">
+                        <div class="px-10 max-w-xl animate-slide-up">
+                            <h1 class="text-4xl md:text-5xl text-white font-bold tracking-tight">Premium Hats Collection</h1>
+                            <p class="mt-4 text-lg text-gray-200 leading-relaxed">
+                                Elevate your fashion game with our incredible hats collection. From trendy fedoras to classic beanies, discover unbeatable style and quality.
+                            </p>
+                            <button class="btn-primary mt-6 shadow-xl hover:shadow-2xl hover:scale-105 transform transition-all duration-200">
+                                <span>Shop Collection</span>
+                                <i class="ml-2 gg-arrow-right"></i>
                             </button>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="flex flex-col py-10 md:flex-row md:py-14">
-
-                    <div
-                        class="mx-auto flex w-4/5 items-start justify-start pb-3 last:border-r-0 sm:w-1/2 md:w-2/5 md:flex-col md:items-center md:justify-center md:border-r-2 md:border-primary-lighter md:pb-0 md:text-center lg:mx-0 lg:w-1/3 lg:flex-row lg:text-left">
-                        <div>
-                            <i class="gg-box"></i>
+                <!-- Features Section -->
+                <section class="py-12 md:py-16">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Feature 1 -->
+                        <div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-4 p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white dark:from-gray-800 dark:to-gray-800 hover:shadow-lg transition-all duration-300 group">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                                <i class="gg-box"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                    Free Shipping
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    On all orders over $30
+                                </p>
+                            </div>
                         </div>
-                        <div class="ml-6 md:mt-3 lg:mt-0">
-                            <h3 class="font-hk text-xl font-semibold tracking-wide text-primary">
-                                Free shipping
-                            </h3>
-                            <p class="font-hk text-base tracking-wide text-secondary-lighter">
-                                On all orders over $30
-                            </p>
+
+                        <!-- Feature 2 -->
+                        <div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-4 p-6 rounded-xl bg-gradient-to-br from-green-50 to-white dark:from-gray-800 dark:to-gray-800 hover:shadow-lg transition-all duration-300 group">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform">
+                                <i class="gg-phone"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                    24/7 Support
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    Always here to help you
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-4 p-6 rounded-xl bg-gradient-to-br from-purple-50 to-white dark:from-gray-800 dark:to-gray-800 hover:shadow-lg transition-all duration-300 group">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                                <i class="gg-mail"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                    Easy Returns
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    30-day return policy
+                                </p>
+                            </div>
                         </div>
                     </div>
+                </section>
 
-                    <div
-                        class="mx-auto flex w-4/5 items-start justify-start pb-3 last:border-r-0 sm:w-1/2 md:w-2/5 md:flex-col md:items-center md:justify-center md:border-r-2 md:border-primary-lighter md:pb-0 md:text-center lg:mx-0 lg:w-1/3 lg:flex-row lg:text-left">
-                        <div>
-                            <i class="gg-phone"></i>
-                        </div>
-                        <div class="ml-6 md:mt-3 lg:mt-0">
-                            <h3 class="font-hk text-xl font-semibold tracking-wide text-primary">
-                                Always available
-                            </h3>
-                            <p class="font-hk text-base tracking-wide text-secondary-lighter">
-                                24/7 call center available
-                            </p>
-                        </div>
-                    </div>
-
-                    <div
-                        class="mx-auto flex w-4/5 items-start justify-start pb-3 last:border-r-0 sm:w-1/2 md:w-2/5 md:flex-col md:items-center md:justify-center md:border-r-2 md:border-primary-lighter md:pb-0 md:text-center lg:mx-0 lg:w-1/3 lg:flex-row lg:text-left">
-                        <div>
-                            <i class="gg-mail"></i>
-                        </div>
-                        <div class="ml-6 md:mt-3 lg:mt-0">
-                            <h3 class="font-hk text-xl font-semibold tracking-wide text-primary">
-                                Free returns
-                            </h3>
-                            <p class="font-hk text-base tracking-wide text-secondary-lighter">
-                                30 days free return policy
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="md:flex">
-                    <div class="grid gap-6 grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 mt-6">
-                        <div class="w-full h-64 mx-auto overflow-hidden bg-cover bg-center"
-                            style="background-image: url('https://images.unsplash.com/photo-1588795904317-2f4ab1a0a852?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')">
-                            <div class="bg-gray-900 bg-opacity-50 flex items-center h-full">
-                                <div class="px-10">
-                                    <h2 class="text-2xl text-white font-semibold">Shirts</h2>
-                                    <p class="mt-2 text-gray-400">Upgrade your wardrobe with our latest shirt
-                                        collection! From crisp office wear to casual weekend styles, we've got you
-                                        covered for any occasion.</p>
-                                    <button
-                                        class="flex items-center mt-4 text-white text-sm uppercase font-medium hover:underline focus:outline-none">
-                                        <span>Shop Now</span>
-                                        <i class="px-2 gg-arrow-right"></i>
-                                    </button>
+                <!-- Category Cards -->
+                <section class="mt-12">
+                    <div class="grid gap-6 grid-cols-1 lg:grid-cols-2">
+                        <!-- Shirts Category -->
+                        <a href="category.html" class="group relative h-80 overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
+                            <img
+                                src="https://images.unsplash.com/photo-1588795904317-2f4ab1a0a852?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                                alt="Shirts collection"
+                                loading="lazy"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent group-hover:bg-black/50 transition-all duration-300 flex items-end">
+                                <div class="p-8 transform transition-transform duration-300 group-hover:translate-y-0 translate-y-2">
+                                    <h2 class="text-3xl text-white font-bold mb-3">Premium Shirts</h2>
+                                    <p class="text-gray-200 mb-4 max-w-md">
+                                        From crisp office wear to casual weekend styles, discover the perfect fit for every occasion.
+                                    </p>
+                                    <span class="inline-flex items-center text-white font-semibold group-hover:gap-3 gap-2 transition-all">
+                                        Shop Collection
+                                        <i class="gg-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="w-full h-64 mx-auto overflow-hidden bg-cover bg-center"
-                            style="background-image: url('https://images.unsplash.com/photo-1631160246898-58192f971b5f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1325&q=80')">
-                            <div class="bg-gray-900 bg-opacity-50 flex items-center h-full">
-                                <div class="px-10">
-                                    <h2 class="text-2xl text-white font-semibold">Accessories</h2>
-                                    <p class="mt-2 text-gray-400">Whether you're looking for a statement piece or a
-                                        versatile addition to your wardrobe, we have the perfect item to tie your look
-                                        together.</p>
-                                    <button
-                                        class="flex items-center mt-4 text-white text-sm uppercase font-medium hover:underline focus:outline-none">
-                                        <span>Shop Now</span>
-                                        <i class="px-2 gg-arrow-right"></i>
-                                    </button>
+                        </a>
+
+                        <!-- Accessories Category -->
+                        <a href="category.html" class="group relative h-80 overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
+                            <img
+                                src="https://images.unsplash.com/photo-1631160246898-58192f971b5f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1325&q=80"
+                                alt="Accessories collection"
+                                loading="lazy"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent group-hover:bg-black/50 transition-all duration-300 flex items-end">
+                                <div class="p-8 transform transition-transform duration-300 group-hover:translate-y-0 translate-y-2">
+                                    <h2 class="text-3xl text-white font-bold mb-3">Accessories</h2>
+                                    <p class="text-gray-200 mb-4 max-w-md">
+                                        Statement pieces and versatile additions to complete and elevate your look.
+                                    </p>
+                                    <span class="inline-flex items-center text-white font-semibold group-hover:gap-3 gap-2 transition-all">
+                                        Shop Collection
+                                        <i class="gg-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
-                </div>
-                <div class="mt-12 mb-3 flex flex-col items-center justify-between sm:mb-10 sm:flex-row sm:pb-4 lg:pb-0">
-                    <div class="text-center sm:text-left">
-                        <h2 class="text-3xl md:text-4xl">
-                            Trending Products
-                        </h2>
+                </section>
+                <!-- Trending Products -->
+                <section class="mt-16">
+                    <div class="flex flex-col items-center justify-between sm:flex-row mb-8">
+                        <div class="text-center sm:text-left">
+                            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                                Trending Products
+                            </h2>
+                            <p class="text-gray-600 dark:text-gray-400">Discover our most popular items this season</p>
+                        </div>
+                        <a href="category.html"
+                            class="mt-4 sm:mt-0 group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
+                            View All Products
+                            <i class="gg-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
-                    <a href="category.html"
-                        class="group flex items-center text-xl transition-colors sm:pt-0 text-blue-500 hover:text-blue-900">
-                        Show more
-                        <i class="px-2 gg-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="mt-8">
-                    <div class="grid gap-6 grid-cols-2 lg:grid-cols-4 mt-6">
-                        <div
-                            class="w-full max-w-sm mx-auto shadow-md overflow-hidden bg-gradient-to-b from-neutral-500 to-neutral-900 hover:from-neutral-600 hover:to-neutral-900">
-                            <div class="flex items-end justify-end h-64 w-full bg-cover bg-center"
-                                style="background-image: url('images/Beanie-grey-medium.png')">
+                    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                        <!-- Product Card 1 -->
+                        <article class="card group cursor-pointer">
+                            <div class="relative h-72 overflow-hidden bg-gradient-to-br from-gray-400 to-gray-700 dark:from-gray-600 dark:to-gray-900">
+                                <img
+                                    src="images/Beanie-grey-medium.png"
+                                    alt="Premium Grey Beanie"
+                                    loading="lazy"
+                                    class="w-full h-full object-cover object-center transform transition-transform duration-500 group-hover:scale-110">
+                                <button
+                                    class="absolute top-4 right-4 p-2 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                                    aria-label="Add to wishlist">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </button>
                             </div>
-                            <div class="px-5 py-3 bg-white">
-                                <h3 class="text-gray-700 uppercase">Beanie</h3>
-                                <span class="text-gray-500 mt-2">$9.99</span>
+                            <div class="p-5">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    Premium Beanie
+                                </h3>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-2xl font-bold text-gray-900 dark:text-white">$9.99</span>
+                                    <div class="flex items-center gap-1 text-yellow-400">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                        </svg>
+                                        <span class="text-sm text-gray-600 dark:text-gray-400">4.8</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div
-                            class="w-full max-w-sm mx-auto shadow-md overflow-hidden bg-gradient-to-b from-neutral-500 to-neutral-900 hover:from-neutral-600 hover:to-neutral-900">
-                            <div class="flex items-end justify-end h-64 w-full bg-cover bg-center"
-                                style="background-image: url('images/jersey-front-black-medium.png')">
+                        </article>
+
+                        <!-- Product Card 2 -->
+                        <article class="card group cursor-pointer">
+                            <div class="relative h-72 overflow-hidden bg-gradient-to-br from-gray-800 to-black">
+                                <img
+                                    src="images/jersey-front-black-medium.png"
+                                    alt="Sports Jersey Black"
+                                    loading="lazy"
+                                    class="w-full h-full object-cover object-center transform transition-transform duration-500 group-hover:scale-110">
+                                <button
+                                    class="absolute top-4 right-4 p-2 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                                    aria-label="Add to wishlist">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </button>
+                                <span class="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-xs font-bold uppercase rounded-full">
+                                    Sale
+                                </span>
                             </div>
-                            <div class="px-5 py-3 bg-white">
-                                <h3 class="text-gray-700 uppercase">Jersey</h3>
-                                <span class="text-gray-500 mt-2">$49.99</span>
+                            <div class="p-5">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    Sports Jersey
+                                </h3>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-2xl font-bold text-gray-900 dark:text-white">$49.99</span>
+                                        <span class="text-sm text-gray-500 line-through ml-2">$69.99</span>
+                                    </div>
+                                    <div class="flex items-center gap-1 text-yellow-400">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                        </svg>
+                                        <span class="text-sm text-gray-600 dark:text-gray-400">4.9</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div
-                            class="w-full max-w-sm mx-auto shadow-md overflow-hidden bg-gradient-to-b from-neutral-500 to-neutral-900 hover:from-neutral-600 hover:to-neutral-900">
-                            <div class="flex items-end justify-end h-64 w-full bg-cover bg-center"
-                                style="background-image: url('images/tshirt-front-blue-medium.png')">
+                        </article>
+
+                        <!-- Product Card 3 -->
+                        <article class="card group cursor-pointer">
+                            <div class="relative h-72 overflow-hidden bg-gradient-to-br from-blue-400 to-blue-700">
+                                <img
+                                    src="images/tshirt-front-blue-medium.png"
+                                    alt="Classic T-Shirt Blue"
+                                    loading="lazy"
+                                    class="w-full h-full object-cover object-center transform transition-transform duration-500 group-hover:scale-110">
+                                <button
+                                    class="absolute top-4 right-4 p-2 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                                    aria-label="Add to wishlist">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </button>
+                                <span class="absolute top-4 left-4 px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase rounded-full">
+                                    New
+                                </span>
                             </div>
-                            <div class="px-5 py-3 bg-white">
-                                <h3 class="text-gray-700 uppercase">T-Shirt</h3>
-                                <span class="text-gray-500 mt-2">$24.99</span>
+                            <div class="p-5">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    Classic T-Shirt
+                                </h3>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-2xl font-bold text-gray-900 dark:text-white">$24.99</span>
+                                    <div class="flex items-center gap-1 text-yellow-400">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                        </svg>
+                                        <span class="text-sm text-gray-600 dark:text-gray-400">5.0</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div
-                            class="w-full max-w-sm mx-auto shadow-md overflow-hidden bg-gradient-to-b from-neutral-500 to-neutral-900 hover:from-neutral-600 hover:to-neutral-900">
-                            <div class="flex items-end justify-end h-64 w-full bg-cover bg-center"
-                                style="background-image: url('images/buckethat-white-medium.png')">
+                        </article>
+
+                        <!-- Product Card 4 -->
+                        <article class="card group cursor-pointer">
+                            <div class="relative h-72 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-700 dark:to-gray-900">
+                                <img
+                                    src="images/buckethat-white-medium.png"
+                                    alt="Bucket Hat White"
+                                    loading="lazy"
+                                    class="w-full h-full object-cover object-center transform transition-transform duration-500 group-hover:scale-110">
+                                <button
+                                    class="absolute top-4 right-4 p-2 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                                    aria-label="Add to wishlist">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </button>
                             </div>
-                            <div class="px-5 py-3 bg-white">
-                                <h3 class="text-gray-700 uppercase">Bucket Hat</h3>
-                                <span class="text-gray-500 mt-2">$9.99</span>
+                            <div class="p-5">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    Bucket Hat
+                                </h3>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-2xl font-bold text-gray-900 dark:text-white">$14.99</span>
+                                    <div class="flex items-center gap-1 text-yellow-400">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                        </svg>
+                                        <span class="text-sm text-gray-600 dark:text-gray-400">4.7</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </article>
                     </div>
-                </div>
+                </section>
             </div>
             <!-- #region Body -->
         </main>
 
         <!-- #region Footer-->
-        <footer class="bg-slate-200">
-            <div class="bg-slate-900 text-white">
-                <div class="py-16 sm:py-20 md:py-24 container mx-auto px-6">
-                    <div class="mx-auto flex flex-col items-center justify-between lg:flex-row">
-                        <div class="text-center lg:text-left w-full">
-                            <h4 class="pb-8 text-xl font-bold">Contact</h4>
-                            <ul>
-                                <li class="block pb-2">
-                                    <a href="mailto:test.email0123@elyssi.com"
-                                        class="text-base transition-colors hover:text-primary">support@acme.com</a>
+        <footer class="bg-gray-100 dark:bg-gray-900 mt-16">
+            <div class="bg-gray-900 dark:bg-black text-white">
+                <div class="py-16 sm:py-20 container mx-auto px-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+                        <!-- Contact Section -->
+                        <div class="text-center md:text-left">
+                            <h4 class="text-xl font-bold mb-6 text-white">Contact Us</h4>
+                            <ul class="space-y-3">
+                                <li>
+                                    <a href="mailto:support@acme.com"
+                                        class="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-blue-400 transition-colors group">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>support@acme.com</span>
+                                    </a>
                                 </li>
-                                <li class="block pb-2">
+                                <li>
                                     <a href="tel:5555555555"
-                                        class="text-base transition-colors hover:text-primary">(555) 555-5555</a>
+                                        class="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-blue-400 transition-colors group">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                        </svg>
+                                        <span>(555) 555-5555</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
-                        <div class="py-16 text-center lg:py-0 w-full">
-                            <a href="index.html" class="font-mono text-4xl uppercase tracking-widest">Acme</a>
-                            <div class="flex items-center justify-center pt-5">
-                                <a href="#">
-                                    <div
-                                        class="mr-5 flex items-center rounded-full bg-white px-2 py-2 group-hover:bg-blue-200">
-                                        <i class="gg-facebook text-gray-900"></i>
+
+                        <!-- Brand & Social -->
+                        <div class="text-center">
+                            <a href="index.html" class="inline-block font-mono text-4xl font-bold uppercase tracking-widest hover:text-blue-400 transition-colors mb-6">
+                                Acme
+                            </a>
+                            <p class="text-gray-400 mb-6 max-w-xs mx-auto">
+                                Premium quality products with exceptional service since 2024
+                            </p>
+                            <div class="flex items-center justify-center gap-3">
+                                <a href="#" aria-label="Facebook" class="group">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-blue-600 transition-all duration-300 transform hover:scale-110">
+                                        <i class="gg-facebook text-white"></i>
                                     </div>
                                 </a>
-                                <a href="#">
-                                    <div
-                                        class="mr-5 flex items-center rounded-full bg-white px-2 py-2 group-hover:bg-blue-200">
-                                        <i class="gg-twitter text-gray-900"></i>
+                                <a href="#" aria-label="Twitter" class="group">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-blue-400 transition-all duration-300 transform hover:scale-110">
+                                        <i class="gg-twitter text-white"></i>
                                     </div>
                                 </a>
-                                <a href="#">
-                                    <div
-                                        class="mr-5 flex items-center rounded-full bg-white px-2 py-2 group-hover:bg-blue-200">
-                                        <i class="gg-instagram text-gray-900"></i>
+                                <a href="#" aria-label="Instagram" class="group">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-pink-600 transition-all duration-300 transform hover:scale-110">
+                                        <i class="gg-instagram text-white"></i>
                                     </div>
                                 </a>
-                                <a href="#">
-                                    <div
-                                        class="flex items-center rounded-full bg-white px-2 py-2 group-hover:bg-blue-200">
-                                        <i class="gg-slack text-gray-900"></i>
+                                <a href="#" aria-label="Slack" class="group">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-purple-600 transition-all duration-300 transform hover:scale-110">
+                                        <i class="gg-slack text-white"></i>
                                     </div>
                                 </a>
                             </div>
                         </div>
-                        <div class="text-center lg:text-right w-full">
-                            <h4 class="pb-8 text-xl font-bold">Links</h4>
-                            <ul>
-                                <li class="block pb-2">
-                                    <a href="index.html" class="text-base transition-colors hover:text-primary">Home</a>
+
+                        <!-- Quick Links -->
+                        <div class="text-center md:text-right">
+                            <h4 class="text-xl font-bold mb-6 text-white">Quick Links</h4>
+                            <ul class="space-y-3">
+                                <li>
+                                    <a href="index.html" class="text-gray-300 hover:text-blue-400 transition-colors">Home</a>
                                 </li>
-                                <li class="block pb-2">
-                                    <a href="category.html"
-                                        class="text-base transition-colors hover:text-primary">Category</a>
+                                <li>
+                                    <a href="category.html" class="text-gray-300 hover:text-blue-400 transition-colors">Shop</a>
                                 </li>
-                                <li class="block pb-2">
-                                    <a href="product.html"
-                                        class="text-base transition-colors hover:text-primary">Product</a>
+                                <li>
+                                    <a href="product.html" class="text-gray-300 hover:text-blue-400 transition-colors">Products</a>
+                                </li>
+                                <li>
+                                    <a href="contact.html" class="text-gray-300 hover:text-blue-400 transition-colors">Contact</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="py-2">
-                <p class="text-center text-base text-secondary">
-                    <a href="https://github.com/jluterek/tailwind-ecommerce-template">Source Code - GitHub</a>
-                </p>
+
+            <!-- Copyright Bar -->
+            <div class="bg-gray-900 dark:bg-black border-t border-gray-800 dark:border-gray-700 py-6">
+                <div class="container mx-auto px-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+                        <p>&copy; 2024 Acme Store. All rights reserved.</p>
+                        <div class="flex gap-6">
+                            <a href="#" class="hover:text-blue-400 transition-colors">Privacy Policy</a>
+                            <a href="#" class="hover:text-blue-400 transition-colors">Terms of Service</a>
+                            <a href="https://github.com/jluterek/tailwind-ecommerce-template"
+                               class="hover:text-blue-400 transition-colors inline-flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                                </svg>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </footer>
 
         <!-- #endregion Footer -->
+
+        <!-- Scroll to Top Button -->
+        <button
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            x-data="{ show: false }"
+            @scroll.window="show = window.pageYOffset > 300"
+            x-show="show"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 transform translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed bottom-8 right-8 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40"
+            style="display: none;"
+            aria-label="Scroll to top">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+        </button>
     </div>
 </body>
 

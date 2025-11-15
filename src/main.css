@@ -2,8 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-.nav-link {
-    @apply mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0;
+@layer base {
+    :root {
+        --color-primary: 47 112 255;
+        --color-secondary: 240 137 31;
+        --color-success: 60 129 107;
+        --color-background: 255 255 255;
+        --color-surface: 248 250 252;
+        --color-text-primary: 15 23 42;
+        --color-text-secondary: 71 85 105;
+    }
+
+    .dark {
+        --color-primary: 81 195 255;
+        --color-secondary: 244 164 67;
+        --color-success: 145 196 188;
+        --color-background: 15 23 42;
+        --color-surface: 30 41 59;
+        --color-text-primary: 248 250 252;
+        --color-text-secondary: 203 213 225;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply antialiased;
+    }
+
+    /* Focus visible for better accessibility */
+    *:focus-visible {
+        @apply outline-2 outline-offset-2 outline-blue-500;
+    }
+
+    /* Improve image rendering */
+    img {
+        @apply max-w-full h-auto;
+    }
+}
+
+@layer components {
+    .nav-link {
+        @apply mt-3 text-gray-600 hover:text-blue-600 hover:underline transition-colors duration-200 sm:mx-3 sm:mt-0 dark:text-gray-300 dark:hover:text-blue-400;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-md border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700;
+    }
+
+    .card {
+        @apply bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl dark:bg-gray-800;
+    }
+
+    .input-field {
+        @apply w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50 transition duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+    }
 }
 
 .star {

@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/jluterek/tailwind-ecommerce-template#readme",
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.1.2",
     "five-server": "^0.4.5",
